@@ -1,4 +1,4 @@
-FROM python:3
+FROM ubuntu:bionic
 
 COPY /install-checkbandwidth.sh /root/
 RUN /bin/bash /root/install-checkbandwidth.sh
