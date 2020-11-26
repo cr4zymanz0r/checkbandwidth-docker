@@ -1,4 +1,4 @@
-FROM python
+FROM python:3
 
 COPY /install-checkbandwidth.sh /root/
 RUN /bin/bash /root/install-checkbandwidth.sh
