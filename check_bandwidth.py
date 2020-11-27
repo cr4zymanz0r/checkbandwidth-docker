@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import speedtest
 from datetime import datetime
 import os
