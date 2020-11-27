@@ -17,7 +17,6 @@ except:
 	exit(0)
 	
 config = json.loads(config_text)
-conn_type = config['conn_type']
 
 timenow = datetime.now()
 dbhost = config['dbhost']
