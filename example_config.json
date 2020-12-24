@@ -6,5 +6,12 @@
 	"dbtable": "tablename",
 	"dlcolumn": "downloadspeed_column_name",
 	"ulcolumn": "uploadspeed_column_name",
-	"datecolumn": "datetime_column_name"
+	"datecolumn": "datetime_column_name",
+	"tweet": false,
+	"twitter_consumer_key": "",
+	"twitter_consumer_secret": "",
+	"twitter_access_token": "",
+	"twitter_access_secret": "",
+	"tweetmegabitthreshold": 100,
+	"tweetcontents": "@WhoYouWantToMention I'm paying for gigabit speeds but I'm currently only getting <SPEED> megabit."
 }

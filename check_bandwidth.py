@@ -6,6 +6,8 @@ import os
 import os.path
 import json
 import mysql.connector
+import math
+import tweepy
 
 cfg_name = '/root/config/config.json'
 
@@ -27,12 +29,33 @@ dbtable = config['dbtable']
 ulcolumn = config['ulcolumn']
 dlcolumn = config['dlcolumn']
 datecolumn = config['datecolumn']
+tweetmegabitthreshold = config['tweetmegabitthreshold']
+tweet = config['tweet']
 
 bwtest = speedtest.Speedtest()
 #bestserver = bwtest.get_best_server()
 #bwtest.set_mini_server(bestserver)
 dspeed = bwtest.download() / 1000000 #mbit
 uspeed = bwtest.upload() / 1000000 #mbit
+
+if (dspeed and dspeed < tweetmegabitthreshold and tweet):
+	print("attempting tweet")
+	consumer_key = config['twitter_consumer_key']
+	consumer_secret = config['twitter_consumer_secret']
+	access_token = config['twitter_access_token']
+	access_token_secret = config['twitter_access_secret']
+	tweetcontents = config['tweetcontents']
+	tweetcontents = tweetcontents.replace("<SPEED>", str(math.trunc(dspeed)))
+
+	# authentication of consumer key and secret 
+	auth = tweepy.OAuthHandler(consumer_key, consumer_secret) 
+	
+	# authentication of access token and secret 
+	auth.set_access_token(access_token, access_token_secret) 
+	api = tweepy.API(auth) 
+	
+	# update the status 
+	tweetobject = api.update_status(status = tweetcontents) 
 
 sqlconnection = mysql.connector.connect(user=dbuser, password=dbpass, host=dbhost, database=dbname)
 cursor = sqlconnection.cursor()
