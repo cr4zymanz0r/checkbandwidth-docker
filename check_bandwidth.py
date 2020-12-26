@@ -45,7 +45,8 @@ if (dspeed and dspeed < tweetmegabitthreshold and tweet):
 	access_token = config['twitter_access_token']
 	access_token_secret = config['twitter_access_secret']
 	tweetcontents = config['tweetcontents']
-	tweetcontents = tweetcontents.replace("<SPEED>", str(math.trunc(dspeed)))
+	tweetcontents = tweetcontents.replace("<SPEED>", str(math.trunc(dspeed)) )
+	tweetcontents = tweetcontents.replace("<DATETIME>", timenow.astimezone().strftime("%Y-%m-%d %I:%M:%S %p %Z") )
 
 	# authentication of consumer key and secret 
 	auth = tweepy.OAuthHandler(consumer_key, consumer_secret) 
@@ -54,8 +55,11 @@ if (dspeed and dspeed < tweetmegabitthreshold and tweet):
 	auth.set_access_token(access_token, access_token_secret) 
 	api = tweepy.API(auth) 
 	
-	# update the status 
-	tweetobject = api.update_status(status = tweetcontents) 
+	# update the status (tweet)
+	try:
+		tweetobject = api.update_status(status = tweetcontents)
+	except Exception as e:
+		print("Problem Tweeting: " + str(e))
 
 sqlconnection = mysql.connector.connect(user=dbuser, password=dbpass, host=dbhost, database=dbname)
 cursor = sqlconnection.cursor()

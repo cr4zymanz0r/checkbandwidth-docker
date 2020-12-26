@@ -13,5 +13,5 @@
 	"twitter_access_token": "",
 	"twitter_access_secret": "",
 	"tweetmegabitthreshold": 100,
-	"tweetcontents": "@WhoYouWantToMention I'm paying for gigabit speeds but I'm currently only getting <SPEED> megabit."
+	"tweetcontents": "@WhoYouWantToMention I'm paying for gigabit speeds but I'm currently only getting <SPEED> megabit.\n <DATETIME>"
 }
