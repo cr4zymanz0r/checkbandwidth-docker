@@ -66,6 +66,7 @@ if (dspeed and dspeed < tweetmegabitthreshold and tweet):
 	tweetcontents = config['tweetcontents']
 	tweetcontents = tweetcontents.replace("<SPEED>", str(math.trunc(dspeed)) )
 	tweetcontents = tweetcontents.replace("<DATETIME>", timenow.astimezone().strftime("%Y-%m-%d %I:%M:%S %p %Z") )
+	tweetcontents = tweetcontents.replace("<TWEETTHRESHOLD>", str(tweetmegabitthreshold))
 
 	# authentication of consumer key and secret 
 	auth = tweepy.OAuthHandler(consumer_key, consumer_secret) 
