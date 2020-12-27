@@ -21,22 +21,37 @@ except:
 config = json.loads(config_text)
 
 timenow = datetime.now()
-dbhost = config['dbhost']
-dbuser = config['dbuser']
-dbpass = config['dbpass']
-dbname = config['dbname']
-dbtable = config['dbtable']
-ulcolumn = config['ulcolumn']
-dlcolumn = config['dlcolumn']
-datecolumn = config['datecolumn']
-tweetmegabitthreshold = config['tweetmegabitthreshold']
 tweet = config['tweet']
+sql = config['sql']
+tweetmegabitthreshold = config['tweetmegabitthreshold']
 
 bwtest = speedtest.Speedtest()
 #bestserver = bwtest.get_best_server()
 #bwtest.set_mini_server(bestserver)
 dspeed = bwtest.download() / 1000000 #mbit
 uspeed = bwtest.upload() / 1000000 #mbit
+
+if (dspeed and sql):
+	dbhost = config['dbhost']
+	dbuser = config['dbuser']
+	dbpass = config['dbpass']
+	dbname = config['dbname']
+	dbtable = config['dbtable']
+	ulcolumn = config['ulcolumn']
+	dlcolumn = config['dlcolumn']
+	datecolumn = config['datecolumn']
+
+	sqlconnection = mysql.connector.connect(user=dbuser, password=dbpass, host=dbhost, database=dbname)
+	cursor = sqlconnection.cursor()
+	add_bandwidth = ("INSERT INTO " + dbtable + " (" + dlcolumn +", " + ulcolumn + ", " + datecolumn + ") VALUES (%s, %s, %s)")
+	bandwidth_data = (dspeed, uspeed, timenow)
+	cursor.execute(add_bandwidth, bandwidth_data)
+
+	try:
+		sqlconnection.commit()
+		sqlconnection.close()
+	except Exception as e:
+		print("Problem logging to SQL: " + str(e))
 
 if (dspeed and dspeed < tweetmegabitthreshold and tweet):
 	print("attempting tweet")
@@ -60,12 +75,3 @@ if (dspeed and dspeed < tweetmegabitthreshold and tweet):
 		tweetobject = api.update_status(status = tweetcontents)
 	except Exception as e:
 		print("Problem Tweeting: " + str(e))
-
-sqlconnection = mysql.connector.connect(user=dbuser, password=dbpass, host=dbhost, database=dbname)
-cursor = sqlconnection.cursor()
-add_bandwidth = ("INSERT INTO " + dbtable + " (" + dlcolumn +", " + ulcolumn + ", " + datecolumn + ") VALUES (%s, %s, %s)")
-bandwidth_data = (dspeed, uspeed, timenow)
-cursor.execute(add_bandwidth, bandwidth_data)
-
-sqlconnection.commit()
-sqlconnection.close()
