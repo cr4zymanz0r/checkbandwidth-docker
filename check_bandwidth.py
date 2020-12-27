@@ -28,8 +28,12 @@ tweetmegabitthreshold = config['tweetmegabitthreshold']
 bwtest = speedtest.Speedtest()
 #bestserver = bwtest.get_best_server()
 #bwtest.set_mini_server(bestserver)
-dspeed = bwtest.download() / 1000000 #mbit
-uspeed = bwtest.upload() / 1000000 #mbit
+try:
+	dspeed = bwtest.download() / 1000000 #mbit
+	uspeed = bwtest.upload() / 1000000 #mbit
+except:
+	print("Issue running speed test (no connectivity?)")
+	exit(0)
 
 if (dspeed and sql):
 	dbhost = config['dbhost']
