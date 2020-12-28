@@ -2,6 +2,7 @@
 
 import speedtest
 from datetime import datetime
+import pytz
 import os
 import os.path
 import json
@@ -20,7 +21,10 @@ except:
 	
 config = json.loads(config_text)
 
+timezonetext = config['timezone']
 timenow = datetime.now()
+timezone = pytz.timezone(timezonetext)
+
 tweet = config['tweet']
 sql = config['sql']
 tweetmegabitthreshold = config['tweetmegabitthreshold']
@@ -65,7 +69,7 @@ if (dspeed and dspeed < tweetmegabitthreshold and tweet):
 	access_token_secret = config['twitter_access_secret']
 	tweetcontents = config['tweetcontents']
 	tweetcontents = tweetcontents.replace("<SPEED>", str(math.trunc(dspeed)) )
-	tweetcontents = tweetcontents.replace("<DATETIME>", timenow.astimezone().strftime("%Y-%m-%d %I:%M:%S %p %Z") )
+	tweetcontents = tweetcontents.replace("<DATETIME>", timenow.astimezone(timezone).strftime("%Y-%m-%d %I:%M:%S %p %Z") )
 	tweetcontents = tweetcontents.replace("<TWEETTHRESHOLD>", str(tweetmegabitthreshold))
 
 	# authentication of consumer key and secret 
